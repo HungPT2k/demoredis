@@ -1,0 +1,36 @@
+##filebeat.prospectors:
+##  - paths:
+##      - /logs/application.log
+##    tags:
+##      - testenv
+##      - apache_access
+##    input_type: log
+##    document_type: apache_access
+##    fields_under_root: true
+##
+##  - paths:
+##      - /apache-logs/error.log
+##    tags:
+##      - testenv
+##      - apache_error
+##    input_type: log
+##    document_type: apache_error
+##    fields_under_root: true
+##
+##output.kafka:
+##  hosts: ["kafka1:9092", "kafka2:9092", "kafka3:9092"]
+##  topic: 'log'
+##  partition.round_robin:
+##    reachable_only: false
+##  required_acks: 1
+##  compression: gzip
+##  max_message_bytes: 1000000
+#
+#filebeat.inputs:
+#  - type: log
+#    enabled: true
+#    paths:
+#      - /demoredis/logs/application.log  # Absolute path of the log file
+#
+#  output.logstash:
+#    hosts: ["localhost:5044"]  # Output is now pointing to Logstash
