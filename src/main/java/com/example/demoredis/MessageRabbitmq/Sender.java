@@ -5,6 +5,7 @@ package com.example.demoredis.MessageRabbitmq;
 
 
 
+import com.rabbitmq.client.AMQP;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ public class Sender {
     @Autowired
     private AmqpTemplate rabbitTemplate;
 
+
     @Value("${broker.exchange}")
     private String exchange;
 
@@ -23,9 +25,10 @@ public class Sender {
     private String key;
 
     public void send(Object company) {
-         rabbitTemplate.convertAndSend(exchange,key, company.toString());
+         rabbitTemplate.convertAndSend(exchange,key, company);
       //  System.out.println("receive " +rabbitTemplate.receive("queue.name"));
         System.out.println("Send msg = " + company);
+
 
     }
 }

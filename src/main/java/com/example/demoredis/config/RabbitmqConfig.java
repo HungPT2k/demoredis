@@ -46,6 +46,8 @@ public class RabbitmqConfig {
 //    TopicExchange topicExchange(){return new TopicExchange(exchange);}
 //    @Bean
 //    FanoutExchange fanoutExchange(){return new FanoutExchange(exchange);}
+//    @Bean
+//    HeadersExchange headersExchange(){return new HeadersExchange(exchange);}
 
     @Bean
     Binding binding() {
@@ -56,6 +58,25 @@ public class RabbitmqConfig {
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
+
+//    //lưu message chưa đến người dùng
+//    @Bean
+//    public Declarables createDeadLetterSchema(){
+//        return new Declarables(
+//                new DirectExchange("x.registration-failure"),
+//                new Queue("q.fall-back-registration"),
+//                new Binding("q.fall-back-registration", Binding.DestinationType.QUEUE,"x.registration-failure", "fall-back", null)
+//        );
+//    }
+//    // tạo queue lưu
+//@Bean
+//public Queue createUserRegistrationQueue() {
+//
+//    return QueueBuilder.durable("q.user-registration")
+//            .withArgument("x-dead-letter-exchange","x.registration-failure")
+//            .withArgument("x-dead-letter-routing-key","fall-back")
+//            .build();
+//}
 //
 //    @Bean
 //    public MessageConverter jsonMessageConverter() {

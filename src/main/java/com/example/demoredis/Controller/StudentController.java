@@ -1,6 +1,7 @@
 package com.example.demoredis.Controller;
 
 import com.example.demoredis.DTO.studentDTO;
+import com.example.demoredis.MessageRabbitmq.Receiver;
 import com.example.demoredis.MessageRabbitmq.Sender;
 import com.example.demoredis.MessageRedis.Publisher;
 import com.example.demoredis.MessageRedis.Subscriber;
@@ -17,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 
 @RestController
@@ -35,6 +38,8 @@ public class StudentController {
 //    private cacheManager cacheManager;
     @Autowired
     private Sender sender;
+    @Autowired
+    private Receiver receiver;
 
     @PostMapping("redis/send-message")
     public ResponseEntity<String> sendMessageFromRedis(@RequestBody studentDTO student) {
@@ -42,8 +47,8 @@ public class StudentController {
         return new ResponseEntity<>("Message sent successfully", HttpStatus.OK);
     }
 
-    @GetMapping("redis/receiving-message")
-    public ResponseEntity<String> receivingMessage(String chanel) {
+    @GetMapping("redis/receiving-message/chanel")
+    public ResponseEntity<String> receivingMessageRedis(@RequestParam("chanel") String chanel) {
         List<String> mess = subscriber.getMessagesByChannel(chanel);
         return new ResponseEntity<>("Message is received " + mess, HttpStatus.OK);
     }
@@ -51,6 +56,11 @@ public class StudentController {
     public ResponseEntity<String> sendMessageFromRabbit(@RequestBody studentDTO studentDTO) {
       sender.send(studentDTO);
         return new ResponseEntity<>("Message sent successfully :"+studentDTO.toString(), HttpStatus.OK);
+    }
+    @GetMapping("rabbitmq/receiving-message/queName")
+    public ResponseEntity<Object> receivingMessageRabbit(@RequestParam("queueName") String queName) throws IOException, TimeoutException {
+      Object mess=  receiver.receivedWithChanel(queName);
+        return new ResponseEntity<>("Message sent successfully :"+mess, HttpStatus.OK);
     }
 
     //    @GetMapping("/getCache/{cacheName}/{key}")
